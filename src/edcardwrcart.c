@@ -38,7 +38,7 @@ int ed_card_wr_cart(u32 cart, u32 lba, u32 count)
             sd_dat_wr(0xF0);
         }
         __cart_dma_rd(__cart_buf, cart, 512);
-        for (i = 0; i < 512; i++) sd_dat_wr(__cart_buf[i]);
+        for (i = 0; i < 512; i++) sd_dat_wr(((char *)__cart_buf)[i]);
         if (!__sd_type)
         {
             for (i = 0; i < 2; i++) sd_dat_wr(0xFF);
@@ -46,7 +46,7 @@ int ed_card_wr_cart(u32 cart, u32 lba, u32 count)
         else
         {
             __sd_crc16((void *)__cart_buf, (void *)__cart_buf);
-            for (i = 0; i < 8; i++) sd_dat_wr(__cart_buf[i]);
+            for (i = 0; i < 8; i++) sd_dat_wr(((char *)__cart_buf)[i]);
             sd_mode(SD_DAT_WR, SD_DAT_1b);
             sd_dat_wr(0xFF);
             sd_mode(SD_DAT_RD, SD_DAT_1b);

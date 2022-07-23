@@ -31,7 +31,7 @@ int ed_card_rd_cart(u32 cart, u32 lba, u32 count)
             }
             while (sd_dat_rd() & 1);
             sd_mode(SD_DAT_RD, SD_DAT_8b);
-            for (i = 0; i < 512; i++) __cart_buf[i] = sd_dat_rd();
+            for (i = 0; i < 512; i++) ((char *)__cart_buf)[i] = sd_dat_rd();
             n = !__sd_type ? 2 : 8;
             for (i = 0; i < n; i++) sd_dat_rd();
             __cart_dma_wr(__cart_buf, cart, 512);

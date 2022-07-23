@@ -1,9 +1,13 @@
-#                libcart - Nintendo 64 flash cartridge library
-#                         Copyright (C) 2022 devwizard
-#      This project is licensed under the terms of the MIT license.  See
-#      LICENSE for more information.
+/******************************************************************************/
+/*               libcart - Nintendo 64 flash cartridge library                */
+/*                        Copyright (C) 2022 devwizard                        */
+/*     This project is licensed under the terms of the MIT license.  See      */
+/*     LICENSE for more information.                                          */
+/******************************************************************************/
 
+#ifndef sgi
 .set gp=64
+#endif
 .set noreorder
 
 .globl __cart_buf_rd
@@ -61,10 +65,3 @@ __cart_buf_wr:
 2:
     j       __cart_dma_wr
     nop
-
-.bss
-.align 4
-
-.globl __cart_buf
-__cart_buf:
-    .space 512

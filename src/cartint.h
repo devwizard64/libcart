@@ -20,6 +20,8 @@ extern void __cart_wr(u32 addr, u32 data);
 
 #else /* _ULTRA64 */
 
+typedef uint64_t u64;
+
 #define PI_BASE_REG             0x04600000
 #define PI_DRAM_ADDR_REG        (PI_BASE_REG+0x00)
 #define PI_CART_ADDR_REG        (PI_BASE_REG+0x04)
@@ -49,6 +51,6 @@ extern void __cart_dma_rd(void *dram, u32 cart, u32 size);
 extern void __cart_dma_wr(const void *dram, u32 cart, u32 size);
 extern void __cart_buf_rd(void *dram, u32 cart, u32 size);
 extern void __cart_buf_wr(const void *dram, u32 cart, u32 size);
-extern char __cart_buf[512];
+extern u64 __cart_buf[512/8];
 
 #endif /* __CARTINT_H__ */

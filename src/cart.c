@@ -8,6 +8,8 @@
 #include <cart.h>
 #include "cartint.h"
 
+u64 __cart_buf[512/8];
+
 #ifdef _ULTRA64
 
 u32 __cart_rd(u32 addr)

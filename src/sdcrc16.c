@@ -86,25 +86,27 @@ void __sd_crc16(unsigned short *dst, const unsigned char *src)
     unsigned short crc[4] = {0};
     for (i = 0; i < 512/4; i++)
     {
-        unsigned char val[4] =
-        {
+        unsigned char val[4];
+        val[0] =
             (src[0] & 0x11) << 3 |
             (src[1] & 0x11) << 2 |
             (src[2] & 0x11) << 1 |
-            (src[3] & 0x11) << 0,
+            (src[3] & 0x11) << 0;
+        val[1] =
             (src[0] & 0x22) << 2 |
             (src[1] & 0x22) << 1 |
             (src[2] & 0x22) << 0 |
-            (src[3] & 0x22) >> 1,
+            (src[3] & 0x22) >> 1;
+        val[2] =
             (src[0] & 0x44) << 1 |
             (src[1] & 0x44) << 0 |
             (src[2] & 0x44) >> 1 |
-            (src[3] & 0x44) >> 2,
+            (src[3] & 0x44) >> 2;
+        val[3] =
             (src[0] & 0x88) << 0 |
             (src[1] & 0x88) >> 1 |
             (src[2] & 0x88) >> 2 |
             (src[3] & 0x88) >> 3,
-        };
         src += 4;
         for (n = 0; n < 4; n++)
         {
