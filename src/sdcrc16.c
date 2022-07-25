@@ -106,7 +106,7 @@ void __sd_crc16(unsigned short *dst, const unsigned char *src)
             (src[0] & 0x88) << 0 |
             (src[1] & 0x88) >> 1 |
             (src[2] & 0x88) >> 2 |
-            (src[3] & 0x88) >> 3,
+            (src[3] & 0x88) >> 3;
         src += 4;
         for (n = 0; n < 4; n++)
         {

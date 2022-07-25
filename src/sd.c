@@ -24,8 +24,8 @@ int __sd_crc7(const char *src)
         crc ^= src[i];
         for (n = 0; n < 8; n++)
         {
-            if (crc & 0x80) crc ^= 9;
             crc <<= 1;
+            if (crc & 0x100) crc ^= 0x12;
         }
     }
     return (crc & 0xFE) | 1;
