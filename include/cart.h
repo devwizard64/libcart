@@ -25,6 +25,9 @@ typedef uint32_t u32;
 extern "C" {
 #endif
 
+extern u32 cart_dom1;
+extern u32 cart_dom2;
+
 extern int cart_type;
 
 extern int cart_init(void);

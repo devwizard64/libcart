@@ -11,17 +11,18 @@
 
 int ed_init(void)
 {
-    int status = -1;
     int ver;
+    cart_dom2 = 0x80370404;
     __cart_acs_get();
     __ed_reg_wr(ED_KEY_REG, ED_KEY);
     ver = __ed_reg_rd(ED_VER_REG) & 0xFFFF;
-    if (ver >= 0x100 && ver < 0x400)
+    if (ver < 0x100 || ver >= 0x400)
     {
-        IO_WRITE(PI_BSD_DOM2_LAT_REG, 0x04);
-        IO_WRITE(PI_BSD_DOM2_PWD_REG, 0x04);
-        status = 0;
+        cart_dom2 = 0;
+        __cart_acs_rel();
+        return -1;
     }
+    __ed_reg_wr(ED_CFG_REG, ED_CFG_SDRAM_ON);
     __cart_acs_rel();
-    return status;
+    return 0;
 }

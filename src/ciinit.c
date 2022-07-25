@@ -11,14 +11,14 @@
 
 int ci_init(void)
 {
-    int status = -1;
     __cart_acs_get();
-    if (__ci_reg_rd(CI_MAGIC_REG) == CI_MAGIC)
+    if (__ci_reg_rd(CI_MAGIC_REG) != CI_MAGIC)
     {
-        __ci_cmd(CI_CARTROM_WR_ON);
-        __ci_cmd(CI_BYTESWAP_OFF);
-        status = 0;
+        __cart_acs_rel();
+        return -1;
     }
+    __ci_cmd(CI_CARTROM_WR_ON);
+    __ci_cmd(CI_BYTESWAP_OFF);
     __cart_acs_rel();
-    return status;
+    return 0;
 }

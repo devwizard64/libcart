@@ -19,9 +19,10 @@ int cart_init(void)
         ed_init,
     };
     int i;
-    for (i = 0; i < CART_MAX; i++)
-    {
-        if (!init[i]()) return cart_type = i;
-    }
+    cart_dom1 = 0x8030FFFF;
+    __cart_acs_get();
+    cart_dom1 = __cart_rd(0x10000000);
+    __cart_acs_rel();
+    for (i = 0; i < CART_MAX; i++) if (!init[i]()) return cart_type = i;
     return cart_type = CART_NULL;
 }
