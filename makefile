@@ -51,20 +51,20 @@ AR      := $(HOST)-ar
 ARCH    := -mabi=32 -march=vr4300 -mfix4300 -mno-abicalls -fno-PIC -G 0
 FLAG    := -Iultra/include -Iinclude -D_ULTRA64
 OPT     := -Os
-WFLAG   := -Wall -Wextra -Wpedantic
+WARN    := -Wall -Wextra -Wpedantic
 CCFLAG  := $(ARCH) -mno-check-zero-division -ffreestanding
 CCFLAG  += -fno-common -fno-toplevel-reorder
-CCFLAG  += $(FLAG) $(OPT) $(WFLAG)
-ASFLAG  := $(ARCH) $(FLAG) $(OPT) $(WFLAG)
+CCFLAG  += $(FLAG) $(OPT) $(WARN)
+ASFLAG  := $(ARCH) $(FLAG) $(OPT)
 
 N64_CC      := $(N64_INST)/bin/mips64-elf-gcc
 N64_AR      := $(N64_INST)/bin/mips64-elf-ar
 N64_ARCH    := -march=vr4300 -mtune=vr4300
 N64_FLAG    := -I$(N64_INST)/mips64-elf/include -Iinclude -DN64 -DDEBUG
 N64_OPT     := -O2
-N64_WFLAG   := -Wall -Wextra -Wno-ignored-qualifiers
+N64_WARN    := -Wall -Wextra -Wno-ignored-qualifiers
 N64_CCFLAG  := $(N64_ARCH) -falign-functions=32 -ffunction-sections -fdata-sections
-N64_CCFLAG  += $(N64_FLAG) $(N64_OPT) $(N64_WFLAG)
+N64_CCFLAG  += $(N64_FLAG) $(N64_OPT) $(N64_WARN)
 N64_ASFLAG  := $(N64_ARCH)
 
 .PHONY: default
