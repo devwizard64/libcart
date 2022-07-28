@@ -16,8 +16,6 @@ int cart_card_init(void)
         edx_card_init,
         ed_card_init,
     };
-#ifdef DEBUG
-    if (cart_type < 0 || cart_type >= CART_MAX) return -1;
-#endif
+    if (cart_type < 0) return -1;
     return card_init[cart_type]();
 }

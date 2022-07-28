@@ -16,8 +16,6 @@ int cart_card_rd_cart(u32 cart, u32 lba, u32 count)
         edx_card_rd_cart,
         ed_card_rd_cart,
     };
-#ifdef DEBUG
-    if (cart_type < 0 || cart_type >= CART_MAX) return -1;
-#endif
+    if (cart_type < 0) return -1;
     return card_rd_cart[cart_type](cart, lba, count);
 }

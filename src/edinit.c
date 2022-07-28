@@ -12,13 +12,14 @@
 int ed_init(void)
 {
     int ver;
+    u32 dom2 = cart_dom2;
     cart_dom2 = 0x80370404;
     __cart_acs_get();
     __ed_reg_wr(ED_KEY_REG, ED_KEY);
     ver = __ed_reg_rd(ED_VER_REG) & 0xFFFF;
     if (ver < 0x100 || ver >= 0x400)
     {
-        cart_dom2 = 0;
+        cart_dom2 = dom2;
         __cart_acs_rel();
         return -1;
     }

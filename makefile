@@ -60,7 +60,7 @@ ASFLAG  := $(ARCH) $(FLAG) $(OPT)
 N64_CC      := $(N64_INST)/bin/mips64-elf-gcc
 N64_AR      := $(N64_INST)/bin/mips64-elf-ar
 N64_ARCH    := -march=vr4300 -mtune=vr4300
-N64_FLAG    := -I$(N64_INST)/mips64-elf/include -Iinclude -DN64 -DDEBUG
+N64_FLAG    := -I$(N64_INST)/mips64-elf/include -Iinclude -DN64
 N64_OPT     := -O2
 N64_WARN    := -Wall -Wextra -Wno-ignored-qualifiers
 N64_CCFLAG  := $(N64_ARCH) -falign-functions=32 -ffunction-sections -fdata-sections

@@ -16,8 +16,6 @@ int cart_card_swap(int flag)
         edx_card_swap,
         ed_card_swap,
     };
-#ifdef DEBUG
-    if (cart_type < 0 || cart_type >= CART_MAX) return -1;
-#endif
+    if (cart_type < 0) return -1;
     return card_swap[cart_type](flag);
 }

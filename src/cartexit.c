@@ -16,8 +16,6 @@ int cart_exit(void)
         edx_exit,
         ed_exit,
     };
-#ifdef DEBUG
-    if (cart_type < 0 || cart_type >= CART_MAX) return -1;
-#endif
+    if (cart_type < 0) return -1;
     return exit[cart_type]();
 }

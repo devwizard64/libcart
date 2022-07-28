@@ -18,8 +18,6 @@ int cart_card_wr_dram(const void *dram, u32 lba, u32 count)
         edx_card_wr_dram,
         ed_card_wr_dram,
     };
-#ifdef DEBUG
-    if (cart_type < 0 || cart_type >= CART_MAX) return -1;
-#endif
+    if (cart_type < 0) return -1;
     return card_wr_dram[cart_type](dram, lba, count);
 }
