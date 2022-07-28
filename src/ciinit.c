@@ -17,6 +17,7 @@ int ci_init(void)
         __cart_acs_rel();
         return -1;
     }
+    __ci_sync();
     __ci_cmd(CI_CARTROM_WR_ON);
     __ci_cmd(CI_BYTESWAP_OFF);
     __cart_acs_rel();
