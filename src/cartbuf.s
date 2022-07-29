@@ -47,11 +47,11 @@ __cart_buf_rd:
 __cart_buf_wr:
     and     $14, $4, 7
     beqz    $14, 2f
-    move    $15, $4
-    lui     $4, %hi(__cart_buf)
-    addiu   $4, $4, %lo(__cart_buf)
+    lui     $15, %hi(__cart_buf)
+    addiu   $15, $15, %lo(__cart_buf)
     move    $24, $4
-    addu    $25, $4, $6
+    addu    $25, $15, $6
+    move    $4, $15
 1:
     ldl     $8, 0($24)
     ldr     $8, 7($24)
