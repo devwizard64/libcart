@@ -17,13 +17,13 @@ __cart_buf_rd:
     subu    $29, 24
     sw      $31, 20($29)
     sw      $4, 24($29)
-    sw      $5, 28($29)
     sw      $6, 32($29)
     lui     $4, %hi(__cart_buf)
     jal     __cart_dma_rd
     addiu   $4, $4, %lo(__cart_buf)
     lw      $15, 24($29)
-    lw      $24, 28($29)
+    lui     $24, %hi(__cart_buf)
+    addiu   $24, $24, %lo(__cart_buf)
     lw      $25, 32($29)
     addu    $25, $15
 1:
