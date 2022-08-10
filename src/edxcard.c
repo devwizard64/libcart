@@ -19,6 +19,7 @@ void __edx_sd_mode(int reg, int val)
         mode = reg;
         __edx_reg_wr(EDX_SD_STATUS_REG, __sd_cfg);
         __edx_reg_wr(mode, 0xFFFF);
+        while (__edx_reg_rd(EDX_SD_STATUS_REG) & EDX_SD_STA_BUSY);
     }
     __edx_reg_wr(EDX_SD_STATUS_REG, __sd_cfg | val);
 }

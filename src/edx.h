@@ -39,8 +39,7 @@
 
 #define EDX_KEY                 0xAA55
 
-#define __edx_reg_rd(reg)        __cart_rd(EDX_BASE_REG|(reg))
-#define __edx_reg_wr(reg, val)  \
-    (__cart_wr(EDX_BASE_REG|(reg), val), __cart_rd(EDX_BASE_REG|(reg)))
+#define __edx_reg_rd(reg)       __cart_rd(EDX_BASE_REG|(reg))
+#define __edx_reg_wr(reg, val)  __cart_wr(EDX_BASE_REG|(reg), val)
 
 #endif /* __EDX_H__ */

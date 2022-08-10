@@ -44,18 +44,17 @@ OBJ := \
 	edcardwrcart.o      \
 	edcardswap.o
 
-HOST    := mips-linux-gnu
-
-CC      := $(HOST)-gcc
-AR      := $(HOST)-ar
-ARCH    := -mabi=32 -march=vr4300 -mfix4300 -mno-abicalls -fno-PIC -G 0
-FLAG    := -Iultra/include -Iinclude -D_ULTRA64
-OPT     := -Os
-WARN    := -Wall -Wextra -Wpedantic
-CCFLAG  := $(ARCH) -mno-check-zero-division -ffreestanding
-CCFLAG  += -fno-common -fno-toplevel-reorder
-CCFLAG  += $(FLAG) $(OPT) $(WARN)
-ASFLAG  := $(ARCH) $(FLAG) $(OPT)
+U64_HOST    := mips-linux-gnu
+U64_CC      := $(U64_HOST)-gcc
+U64_AR      := $(U64_HOST)-ar
+U64_ARCH    := -mabi=32 -march=vr4300 -mfix4300 -mno-abicalls -fno-PIC -G 0
+U64_FLAG    := -Iultra/include -Iinclude -D_ULTRA64
+U64_OPT     := -Os
+U64_WARN    := -Wall -Wextra -Wpedantic
+U64_CCFLAG  := $(U64_ARCH) -mno-check-zero-division -ffreestanding
+U64_CCFLAG  += -fno-common -fno-toplevel-reorder
+U64_CCFLAG  += $(U64_FLAG) $(U64_OPT) $(U64_WARN)
+U64_ASFLAG  := $(U64_ARCH) $(U64_FLAG) $(U64_OPT)
 
 N64_CC      := $(N64_INST)/bin/mips64-elf-gcc
 N64_AR      := $(N64_INST)/bin/mips64-elf-ar
@@ -76,15 +75,15 @@ clean:
 
 lib/libcart_ultra.a: $(addprefix build/ultra/,$(OBJ))
 	@mkdir -p $(dir $@)
-	$(AR) rc $@ $^
+	$(U64_AR) rc $@ $^
 
 build/ultra/%.o: src/%.s
 	@mkdir -p $(dir $@)
-	$(CC) $(ASFLAG) -c -o $@ $<
+	$(U64_CC) $(U64_ASFLAG) -c -o $@ $<
 
 build/ultra/%.o: src/%.c
 	@mkdir -p $(dir $@)
-	$(CC) $(CCFLAG) -c -o $@ $<
+	$(U64_CC) $(U64_CCFLAG) -c -o $@ $<
 
 lib/libcart_dragon.a: $(addprefix build/dragon/,$(OBJ))
 	@mkdir -p $(dir $@)
