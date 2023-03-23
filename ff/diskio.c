@@ -1,17 +1,11 @@
 /*-----------------------------------------------------------------------*/
 /* Low level disk I/O module for FatFs (libcart)    (C)ChaN, 2019        */
-/*                                                  (C)devwizard, 2022   */
+/*                                             (C)devwizard, 2022-2023   */
 /*-----------------------------------------------------------------------*/
 
 #include "ff.h"			/* Obtains integer types */
 #include "diskio.h"		/* Declarations of disk functions */
 #include <cart.h>
-
-#ifdef _ULTRA64
-#define va_to_pa(addr)	osVirtualToPhysical((void *)(addr))
-#else
-#define va_to_pa(addr)	PhysicalAddr(addr)
-#endif
 
 /* Definitions of physical drive number for each drive */
 #define DEV_CARD	0	/* Cartridge memory card */
@@ -68,7 +62,11 @@ DRESULT disk_read (
 
 	switch (pdrv) {
 	case DEV_CARD :
-		addr = va_to_pa(buff);
+#ifdef _ULTRA64
+		addr = osVirtualToPhysical(buff);
+#else
+		addr = PhysicalAddr(buff);
+#endif
 		if (addr < 0x800000) return cart_card_rd_dram(buff, sector, count) ? RES_ERROR : RES_OK;
 		else                 return cart_card_rd_cart(addr, sector, count) ? RES_ERROR : RES_OK;
 	}
@@ -95,7 +93,11 @@ DRESULT disk_write (
 
 	switch (pdrv) {
 	case DEV_CARD :
-		addr = va_to_pa(buff);
+#ifdef _ULTRA64
+		addr = osVirtualToPhysical((void *)buff);
+#else
+		addr = PhysicalAddr(buff);
+#endif
 		if (addr < 0x800000) return cart_card_wr_dram(buff, sector, count) ? RES_ERROR : RES_OK;
 		else                 return cart_card_wr_cart(addr, sector, count) ? RES_ERROR : RES_OK;
 	}

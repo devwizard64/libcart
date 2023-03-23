@@ -1,6 +1,6 @@
 /******************************************************************************/
 /*               libcart - Nintendo 64 flash cartridge library                */
-/*                        Copyright (C) 2022 devwizard                        */
+/*                    Copyright (C) 2022 - 2023 devwizard                     */
 /*     This project is licensed under the terms of the MIT license.  See      */
 /*     LICENSE for more information.                                          */
 /******************************************************************************/
@@ -18,7 +18,7 @@
 #define SD_DAT_8b       ED_SPI_8BIT
 #define SD_DAT_1b       ED_SPI_1BIT
 
-#define sd_mode(reg, val)   __ed_reg_wr(ED_SPI_CFG_REG, __sd_cfg|(reg)|(val))
+#define sd_mode(reg, val)   __cart_wr(ED_SPI_CFG_REG, __sd_cfg|(reg)|(val))
 #define sd_cmd_rd(val)      __ed_spi((val) & 0xFF)
 #define sd_cmd_wr(val)      __ed_spi((val) & 0xFF)
 #define sd_dat_rd()         __ed_spi(0xFF)

@@ -1,6 +1,6 @@
 /******************************************************************************/
 /*               libcart - Nintendo 64 flash cartridge library                */
-/*                        Copyright (C) 2022 devwizard                        */
+/*                    Copyright (C) 2022 - 2023 devwizard                     */
 /*     This project is licensed under the terms of the MIT license.  See      */
 /*     LICENSE for more information.                                          */
 /******************************************************************************/
@@ -127,25 +127,15 @@ void __cart_dma_wr(const void *dram, u32 cart, u32 size)
 void __cart_dma_rd(void *dram, u32 cart, u32 size)
 {
     data_cache_hit_writeback_invalidate(dram, size);
-    disable_interrupts();
-    while (IO_READ(PI_STATUS_REG) & (PI_STATUS_DMA_BUSY|PI_STATUS_IO_BUSY));
-    IO_WRITE(PI_DRAM_ADDR_REG, PhysicalAddr(dram));
-    IO_WRITE(PI_CART_ADDR_REG, cart);
-    IO_WRITE(PI_WR_LEN_REG, size-1);
-    while (IO_READ(PI_STATUS_REG) & (PI_STATUS_DMA_BUSY|PI_STATUS_IO_BUSY));
-    enable_interrupts();
+    dma_read_raw_async(dram, cart, size);
+    dma_wait();
 }
 
 void __cart_dma_wr(const void *dram, u32 cart, u32 size)
 {
     data_cache_hit_writeback(dram, size);
-    disable_interrupts();
-    while (IO_READ(PI_STATUS_REG) & (PI_STATUS_DMA_BUSY|PI_STATUS_IO_BUSY));
-    IO_WRITE(PI_DRAM_ADDR_REG, PhysicalAddr(dram));
-    IO_WRITE(PI_CART_ADDR_REG, cart);
-    IO_WRITE(PI_RD_LEN_REG, size-1);
-    while (IO_READ(PI_STATUS_REG) & (PI_STATUS_DMA_BUSY|PI_STATUS_IO_BUSY));
-    enable_interrupts();
+    dma_write_raw_async(dram, cart, size);
+    dma_wait();
 }
 
 #endif /* _ULTRA64 */

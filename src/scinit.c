@@ -7,16 +7,24 @@
 
 #include <cart.h>
 #include "cartint.h"
+#include "sc.h"
 
-int cart_exit(void)
+int sc_init(void)
 {
-    static int (*const exit[CART_MAX])(void) =
+    __cart_acs_get();
+    __cart_wr(SC_KEY_REG, SC_KEY_RESET);
+    __cart_wr(SC_KEY_REG, SC_KEY_UNL);
+    __cart_wr(SC_KEY_REG, SC_KEY_OCK);
+    if (__cart_rd(SC_VERSION_REG) != SC_VERSION)
     {
-        ci_exit,
-        edx_exit,
-        ed_exit,
-        sc_exit,
-    };
-    if (cart_type < 0) return -1;
-    return exit[cart_type]();
+        __cart_acs_rel();
+        return -1;
+    }
+    __sc_sync();
+    __cart_wr(SC_DATA0_REG, SC_CFG_ROM_WRITE);
+    __cart_wr(SC_DATA1_REG, 1);
+    __cart_wr(SC_COMMAND_REG, SC_CONFIG_SET);
+    __sc_sync();
+    __cart_acs_rel();
+    return 0;
 }

@@ -1,6 +1,6 @@
 /******************************************************************************/
 /*               libcart - Nintendo 64 flash cartridge library                */
-/*                        Copyright (C) 2022 devwizard                        */
+/*                    Copyright (C) 2022 - 2023 devwizard                     */
 /*     This project is licensed under the terms of the MIT license.  See      */
 /*     LICENSE for more information.                                          */
 /******************************************************************************/
@@ -24,8 +24,7 @@ int __sd_crc7(const char *src)
         crc ^= src[i];
         for (n = 0; n < 8; n++)
         {
-            crc <<= 1;
-            if (crc & 0x100) crc ^= 0x12;
+            if ((crc <<= 1) & 0x100) crc ^= 0x12;
         }
     }
     return (crc & 0xFE) | 1;

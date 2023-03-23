@@ -1,6 +1,6 @@
 /******************************************************************************/
 /*               libcart - Nintendo 64 flash cartridge library                */
-/*                        Copyright (C) 2022 devwizard                        */
+/*                    Copyright (C) 2022 - 2023 devwizard                     */
 /*     This project is licensed under the terms of the MIT license.  See      */
 /*     LICENSE for more information.                                          */
 /******************************************************************************/
@@ -10,23 +10,23 @@
 
 #define ED_BASE_REG             0x08040000
 
-#define ED_CFG_REG              0x0000
-#define ED_STATUS_REG           0x0004
-#define ED_DMA_LEN_REG          0x0008
-#define ED_DMA_ADDR_REG         0x000C
-#define ED_MSG_REG              0x0010
-#define ED_DMA_CFG_REG          0x0014
-#define ED_SPI_REG              0x0018
-#define ED_SPI_CFG_REG          0x001C
-#define ED_KEY_REG              0x0020
-#define ED_SAV_CFG_REG          0x0024
-#define ED_SEC_REG              0x0028
-#define ED_VER_REG              0x002C
+#define ED_CFG_REG              (ED_BASE_REG+0x00)
+#define ED_STATUS_REG           (ED_BASE_REG+0x04)
+#define ED_DMA_LEN_REG          (ED_BASE_REG+0x08)
+#define ED_DMA_ADDR_REG         (ED_BASE_REG+0x0C)
+#define ED_MSG_REG              (ED_BASE_REG+0x10)
+#define ED_DMA_CFG_REG          (ED_BASE_REG+0x14)
+#define ED_SPI_REG              (ED_BASE_REG+0x18)
+#define ED_SPI_CFG_REG          (ED_BASE_REG+0x1C)
+#define ED_KEY_REG              (ED_BASE_REG+0x20)
+#define ED_SAV_CFG_REG          (ED_BASE_REG+0x24)
+#define ED_SEC_REG              (ED_BASE_REG+0x28)
+#define ED_VER_REG              (ED_BASE_REG+0x2C)
 
-#define ED_CFG_CNT_REG          0x0040
-#define ED_CFG_DAT_REG          0x0044
-#define ED_MAX_MSG_REG          0x0048
-#define ED_CRC_REG              0x004C
+#define ED_CFG_CNT_REG          (ED_BASE_REG+0x40)
+#define ED_CFG_DAT_REG          (ED_BASE_REG+0x44)
+#define ED_MAX_MSG_REG          (ED_BASE_REG+0x48)
+#define ED_CRC_REG              (ED_BASE_REG+0x4C)
 
 #define ED_DMA_SD_TO_RAM        1
 #define ED_DMA_RAM_TO_SD        2
@@ -55,8 +55,5 @@
 #define ED_SPI_1BIT             (1 << 5)
 
 #define ED_KEY                  0x1234
-
-#define __ed_reg_rd(reg)        __cart_rd(ED_BASE_REG|(reg))
-#define __ed_reg_wr(reg, val)   __cart_wr(ED_BASE_REG|(reg), val)
 
 #endif /* __ED_H__ */

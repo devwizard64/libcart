@@ -1,6 +1,6 @@
 /******************************************************************************/
 /*               libcart - Nintendo 64 flash cartridge library                */
-/*                        Copyright (C) 2022 devwizard                        */
+/*                    Copyright (C) 2022 - 2023 devwizard                     */
 /*     This project is licensed under the terms of the MIT license.  See      */
 /*     LICENSE for more information.                                          */
 /******************************************************************************/
@@ -41,10 +41,10 @@ int ed_card_rd_cart(u32 cart, u32 lba, u32 count)
     else
     {
         sd_mode(SD_DAT_RD, SD_DAT_8b);
-        __ed_reg_wr(ED_DMA_LEN_REG, count-1);
-        __ed_reg_wr(ED_DMA_ADDR_REG, (cart & 0x3FFFFFF) >> 11);
-        __ed_reg_wr(ED_DMA_CFG_REG, ED_DMA_SD_TO_RAM);
-        while ((resp = __ed_reg_rd(ED_STATUS_REG)) & ED_STATE_DMA_BUSY)
+        __cart_wr(ED_DMA_LEN_REG, count-1);
+        __cart_wr(ED_DMA_ADDR_REG, (cart & 0x3FFFFFF) >> 11);
+        __cart_wr(ED_DMA_CFG_REG, ED_DMA_SD_TO_RAM);
+        while ((resp = __cart_rd(ED_STATUS_REG)) & ED_STATE_DMA_BUSY)
         {
             if (resp & ED_STATE_DMA_TOUT) {__cart_acs_rel(); return -1;}
         }

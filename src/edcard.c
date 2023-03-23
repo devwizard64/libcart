@@ -1,6 +1,6 @@
 /******************************************************************************/
 /*               libcart - Nintendo 64 flash cartridge library                */
-/*                        Copyright (C) 2022 devwizard                        */
+/*                    Copyright (C) 2022 - 2023 devwizard                     */
 /*     This project is licensed under the terms of the MIT license.  See      */
 /*     LICENSE for more information.                                          */
 /******************************************************************************/
@@ -13,9 +13,9 @@
 
 int __ed_spi(int val)
 {
-    __ed_reg_wr(ED_SPI_REG, val);
-    while (__ed_reg_rd(ED_STATUS_REG) & ED_STATE_SPI);
-    return __ed_reg_rd(ED_SPI_REG);
+    __cart_wr(ED_SPI_REG, val);
+    while (__cart_rd(ED_STATUS_REG) & ED_STATE_SPI);
+    return __cart_rd(ED_SPI_REG);
 }
 
 int __ed_sd_cmd(int cmd, u32 arg)

@@ -1,5 +1,5 @@
 # libcart - Nintendo 64 flash cartridge library
-Copyright (C) 2022 devwizard
+Copyright (C) 2022 - 2023 devwizard
 
 This project is licensed under the terms of the MIT license.  See `LICENSE` for
 more information.
@@ -13,6 +13,7 @@ the hardware.
 * 64Drive HW1 and HW2
 * EverDrive-64 V1, V2, V2.5, V3, X7 and X5
 * ED64Plus / Super 64
+* SummerCart64
 
 [Testing result spreadsheet](https://docs.google.com/spreadsheets/d/19opOv4e_4ABqgOmqRBSREtXLdGy08VzMsymtxWky0NU/edit?usp=sharing)
 

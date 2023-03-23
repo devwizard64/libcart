@@ -486,6 +486,7 @@ typedef u32 OSYieldResult;
 #define _SHIFTR(v, s, w)        \
     ((unsigned int)(((unsigned int)(v) >> (s)) & ((0x01 << (w)) - 1)))
 #include <gbi.h>
+#include <abi.h>
 #define SEGMENT_OFFSET(a)       ((unsigned int)(a) & 0x00ffffff)
 #define SEGMENT_NUMBER(a)       (((unsigned int)(a) << 4) >> 28)
 

@@ -1,6 +1,6 @@
 /******************************************************************************/
 /*               libcart - Nintendo 64 flash cartridge library                */
-/*                        Copyright (C) 2022 devwizard                        */
+/*                    Copyright (C) 2022 - 2023 devwizard                     */
 /*     This project is licensed under the terms of the MIT license.  See      */
 /*     LICENSE for more information.                                          */
 /******************************************************************************/
@@ -19,7 +19,8 @@ typedef uint32_t u32;
 #define CART_CI         0
 #define CART_EDX        1
 #define CART_ED         2
-#define CART_MAX        3
+#define CART_SC         3
+#define CART_MAX        4
 
 #ifdef __cplusplus
 extern "C" {
@@ -65,6 +66,15 @@ extern int ed_card_rd_dram(void *dram, u32 lba, u32 count);
 extern int ed_card_rd_cart(u32 cart, u32 lba, u32 count);
 extern int ed_card_wr_dram(const void *dram, u32 lba, u32 count);
 extern int ed_card_wr_cart(u32 cart, u32 lba, u32 count);
+
+extern int sc_init(void);
+extern int sc_exit(void);
+extern int sc_card_init(void);
+extern int sc_card_swap(int flag);
+extern int sc_card_rd_dram(void *dram, u32 lba, u32 count);
+extern int sc_card_rd_cart(u32 cart, u32 lba, u32 count);
+extern int sc_card_wr_dram(const void *dram, u32 lba, u32 count);
+extern int sc_card_wr_cart(u32 cart, u32 lba, u32 count);
 
 #ifdef __cplusplus
 }

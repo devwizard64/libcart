@@ -7,16 +7,10 @@
 
 #include <cart.h>
 #include "cartint.h"
+#include "sc.h"
 
-int cart_exit(void)
+int sc_card_swap(int flag)
 {
-    static int (*const exit[CART_MAX])(void) =
-    {
-        ci_exit,
-        edx_exit,
-        ed_exit,
-        sc_exit,
-    };
-    if (cart_type < 0) return -1;
-    return exit[cart_type]();
+    (void)flag;
+    return -1;
 }

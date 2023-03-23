@@ -1,6 +1,6 @@
 /******************************************************************************/
 /*               libcart - Nintendo 64 flash cartridge library                */
-/*                        Copyright (C) 2022 devwizard                        */
+/*                    Copyright (C) 2022 - 2023 devwizard                     */
 /*     This project is licensed under the terms of the MIT license.  See      */
 /*     LICENSE for more information.                                          */
 /******************************************************************************/
@@ -11,36 +11,36 @@
 #include "edx.h"
 #include "edxcard.h"
 
-void __edx_sd_mode(int reg, int val)
+void __edx_sd_mode(u32 reg, int val)
 {
-    static unsigned short mode;
+    static u32 mode;
     if (mode != reg)
     {
         mode = reg;
-        __edx_reg_wr(EDX_SD_STATUS_REG, __sd_cfg);
-        __edx_reg_wr(mode, 0xFFFF);
-        while (__edx_reg_rd(EDX_SD_STATUS_REG) & EDX_SD_STA_BUSY);
+        __cart_wr(EDX_SD_STATUS_REG, __sd_cfg);
+        __cart_wr(reg, 0xFFFF);
+        while (__cart_rd(EDX_SD_STATUS_REG) & EDX_SD_STA_BUSY);
     }
-    __edx_reg_wr(EDX_SD_STATUS_REG, __sd_cfg | val);
+    __cart_wr(EDX_SD_STATUS_REG, __sd_cfg | val);
 }
 
 int __edx_sd_cmd_rd(void)
 {
-    __edx_reg_wr(EDX_SD_CMD_RD_REG, 0xFFFF);
-    while (__edx_reg_rd(EDX_SD_STATUS_REG) & EDX_SD_STA_BUSY);
-    return __edx_reg_rd(EDX_SD_CMD_RD_REG);
+    __cart_wr(EDX_SD_CMD_RD_REG, 0xFFFF);
+    while (__cart_rd(EDX_SD_STATUS_REG) & EDX_SD_STA_BUSY);
+    return __cart_rd(EDX_SD_CMD_RD_REG);
 }
 
 void __edx_sd_cmd_wr(int val)
 {
-    __edx_reg_wr(EDX_SD_CMD_WR_REG, val);
-    while (__edx_reg_rd(EDX_SD_STATUS_REG) & EDX_SD_STA_BUSY);
+    __cart_wr(EDX_SD_CMD_WR_REG, val);
+    while (__cart_rd(EDX_SD_STATUS_REG) & EDX_SD_STA_BUSY);
 }
 
 int __edx_sd_dat_rd(void)
 {
-    __edx_reg_wr(EDX_SD_DAT_RD_REG, 0xFFFF);
-    return __edx_reg_rd(EDX_SD_DAT_RD_REG);
+    __cart_wr(EDX_SD_DAT_RD_REG, 0xFFFF);
+    return __cart_rd(EDX_SD_DAT_RD_REG);
 }
 
 int __edx_sd_cmd(int cmd, u32 arg)

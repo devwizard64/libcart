@@ -1,126 +1,147 @@
 /*------------------------------------------------------------------------*/
-/* Sample Code of OS Dependent Functions for FatFs (libultra)             */
-/* (C)ChaN, 2018    (C)devwizard, 2022                                    */
+/* A Sample Code of User Provided OS Dependent Functions for FatFs        */
 /*------------------------------------------------------------------------*/
-
 
 #include "ff.h"
 
 
-#if FF_USE_LFN == 3	/* Dynamic memory allocation */
+#if FF_USE_LFN == 3	/* Use dynamic memory allocation */
 
 /*------------------------------------------------------------------------*/
-/* Allocate a memory block                                                */
+/* Allocate/Free a Memory Block                                           */
 /*------------------------------------------------------------------------*/
+
+#include <stdlib.h>		/* with POSIX API */
+
 
 void* ff_memalloc (	/* Returns pointer to the allocated memory block (null if not enough core) */
 	UINT msize		/* Number of bytes to allocate */
 )
 {
-	return malloc(msize);	/* Allocate a new memory block with POSIX API */
+	return malloc((size_t)msize);	/* Allocate a new memory block */
 }
 
 
-/*------------------------------------------------------------------------*/
-/* Free a memory block                                                    */
-/*------------------------------------------------------------------------*/
-
 void ff_memfree (
-	void* mblock	/* Pointer to the memory block to free (nothing to do if null) */
+	void* mblock	/* Pointer to the memory block to free (no effect if null) */
 )
 {
-	free(mblock);	/* Free the memory block with POSIX API */
+	free(mblock);	/* Free the memory block */
 }
 
 #endif
+
 
 
 
 #if FF_FS_REENTRANT	/* Mutal exclusion */
+/*------------------------------------------------------------------------*/
+/* Definitions of Mutex                                                   */
+/*------------------------------------------------------------------------*/
+
+#define OS_TYPE	0	/* 0:libultra */
+
+
+#if   OS_TYPE == 0	/* libultra */
+#include <ultra64.h>
+static struct {
+	OSMesgQueue mq;
+	OSMesg msg[1];
+} Mutex[FF_VOLUMES + 1];	/* Table of mutex access queue */
+
+#endif
+
+
 
 /*------------------------------------------------------------------------*/
-/* Create a Synchronization Object                                        */
+/* Create a Mutex                                                         */
 /*------------------------------------------------------------------------*/
-/* This function is called in f_mount() function to create a new
-/  synchronization object for the volume, such as semaphore and mutex.
-/  When a 0 is returned, the f_mount() function fails with FR_INT_ERR.
+/* This function is called in f_mount function to create a new mutex
+/  or semaphore for the volume. When a 0 is returned, the f_mount function
+/  fails with FR_INT_ERR.
 */
 
-static OSAccessQueue AccessQueue[FF_VOLUMES];	/* Table of OSAccessQueue */
-
-
-int ff_cre_syncobj (	/* 1:Function succeeded, 0:Could not create the sync object */
-	BYTE vol,			/* Corresponding volume (logical drive number) */
-	FF_SYNC_t* sobj		/* Pointer to return the created sync object */
+int ff_mutex_create (	/* Returns 1:Function succeeded or 0:Could not create the mutex */
+	int vol				/* Mutex ID: Volume mutex (0 to FF_VOLUMES - 1) or system mutex (FF_VOLUMES) */
 )
 {
-	OSAccessQueue *acs = *sobj = &AccessQueue[vol];
-	osCreateMesgQueue(&acs->mq, acs->msg, 1);
-	osSendMesg(&acs->mq, (OSMesg)1, OS_MESG_NOBLOCK);
+#if OS_TYPE == 0	/* libultra */
+	osCreateMesgQueue(&Mutex[vol].mq, Mutex[vol].msg, 1);
+	osSendMesg(&Mutex[vol].mq, (OSMesg)0, OS_MESG_NOBLOCK);
 	return 1;
+
+#endif
 }
 
 
 /*------------------------------------------------------------------------*/
-/* Delete a Synchronization Object                                        */
+/* Delete a Mutex                                                         */
 /*------------------------------------------------------------------------*/
-/* This function is called in f_mount() function to delete a synchronization
-/  object that created with ff_cre_syncobj() function. When a 0 is returned,
-/  the f_mount() function fails with FR_INT_ERR.
+/* This function is called in f_mount function to delete a mutex or
+/  semaphore of the volume created with ff_mutex_create function.
 */
 
-int ff_del_syncobj (	/* 1:Function succeeded, 0:Could not delete due to an error */
-	FF_SYNC_t sobj		/* Sync object tied to the logical drive to be deleted */
+void ff_mutex_delete (	/* Returns 1:Function succeeded or 0:Could not delete due to an error */
+	int vol				/* Mutex ID: Volume mutex (0 to FF_VOLUMES - 1) or system mutex (FF_VOLUMES) */
 )
 {
-	(void)sobj;
+#if OS_TYPE == 0	/* libultra */
+	(void)vol;
 	return 1;
+
+#endif
 }
 
 
 /*------------------------------------------------------------------------*/
-/* Request Grant to Access the Volume                                     */
+/* Request a Grant to Access the Volume                                   */
 /*------------------------------------------------------------------------*/
-/* This function is called on entering file functions to lock the volume.
+/* This function is called on enter file functions to lock the volume.
 /  When a 0 is returned, the file function fails with FR_TIMEOUT.
 */
 
-int ff_req_grant (	/* 1:Got a grant to access the volume, 0:Could not get a grant */
-	FF_SYNC_t sobj	/* Sync object to wait */
+int ff_mutex_take (	/* Returns 1:Succeeded or 0:Timeout */
+	int vol			/* Mutex ID: Volume mutex (0 to FF_VOLUMES - 1) or system mutex (FF_VOLUMES) */
 )
 {
+#if OS_TYPE == 0	/* libultra */
 #if FF_FS_TIMEOUT < 0
-	if (osRecvMesg(&sobj->mq, NULL, OS_MESG_NOBLOCK) < 0) return 0;
-	return 1;
+	osRecvMesg(&Mutex[vol].mq, NULL, OS_MESG_BLOCK);
 #endif
 #if FF_FS_TIMEOUT == 0
-	osRecvMesg(&sobj->mq, NULL, OS_MESG_BLOCK);
-	return 1;
+	if (osRecvMesg(&Mutex[vol].mq, NULL, OS_MESG_NOBLOCK) < 0) return 0;
 #endif
 #if FF_FS_TIMEOUT > 0
 	OSMesg msg;
 	OSTimer timer;
-	osSetTimer(&timer, FF_FS_TIMEOUT, 0, &sobj->mq, (OSMesg)0);
-	osRecvMesg(&sobj->mq, &msg, OS_MESG_BLOCK);
+	osSetTimer(&timer, FF_FS_TIMEOUT, 0, &Mutex[vol].mq, (OSMesg)1);
+	osRecvMesg(&Mutex[vol].mq, &msg, OS_MESG_BLOCK);
 	osStopTimer(&timer);
-	if (msg) osRecvMesg(&sobj->mq, NULL, OS_MESG_NOBLOCK);
-	return (int)msg;
+	if (msg) return 0;
+	osRecvMesg(&Mutex[vol].mq, NULL, OS_MESG_NOBLOCK);
+#endif
+	return 1;
+
 #endif
 }
 
 
+
 /*------------------------------------------------------------------------*/
-/* Release Grant to Access the Volume                                     */
+/* Release a Grant to Access the Volume                                   */
 /*------------------------------------------------------------------------*/
-/* This function is called on leaving file functions to unlock the volume.
+/* This function is called on leave file functions to unlock the volume.
 */
 
-void ff_rel_grant (
-	FF_SYNC_t sobj	/* Sync object to be signaled */
+void ff_mutex_give (
+	int vol			/* Mutex ID: Volume mutex (0 to FF_VOLUMES - 1) or system mutex (FF_VOLUMES) */
 )
 {
-	osSendMesg(&sobj->mq, (OSMesg)1, OS_MESG_BLOCK);
-}
+#if OS_TYPE == 0	/* libultra */
+	osSendMesg(&Mutex[vol].mq, (OSMesg)0, OS_MESG_BLOCK);
 
 #endif
+}
+
+#endif	/* FF_FS_REENTRANT */
 

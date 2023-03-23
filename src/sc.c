@@ -7,16 +7,11 @@
 
 #include <cart.h>
 #include "cartint.h"
+#include "sc.h"
 
-int cart_exit(void)
+int __sc_sync(void)
 {
-    static int (*const exit[CART_MAX])(void) =
-    {
-        ci_exit,
-        edx_exit,
-        ed_exit,
-        sc_exit,
-    };
-    if (cart_type < 0) return -1;
-    return exit[cart_type]();
+    while (__cart_rd(SC_STATUS_REG) & SC_CMD_BUSY);
+    if (__cart_rd(SC_STATUS_REG) & SC_CMD_ERROR) return -1;
+    return 0;
 }

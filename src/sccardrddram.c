@@ -7,29 +7,40 @@
 
 #include <cart.h>
 #include "cartint.h"
-#include "ci.h"
+#include "sc.h"
 
-int ci_card_rd_dram(void *dram, u32 lba, u32 count)
+int sc_card_rd_dram(void *dram, u32 lba, u32 count)
 {
     char *addr = dram;
+    int i;
+    int n;
     __cart_acs_get();
-    __ci_sync();
-    while (count-- > 0)
+    __sc_sync();
+    while (count > 0)
     {
-        __cart_wr(CI_LBA_REG, lba);
-        __cart_wr(CI_COMMAND_REG, CI_RD_BUFFER);
-        if (__ci_sync())
+        n = count < 16 ? count : 16;
+        __cart_wr(SC_DATA0_REG, lba);
+        __cart_wr(SC_COMMAND_REG, SC_SD_SECTOR_SET);
+        if (__sc_sync())
         {
-            __cart_wr(CI_COMMAND_REG, CI_ABORT);
-            __ci_sync();
-            __cart_wr(CI_COMMAND_REG, CI_SD_RESET);
-            __ci_sync();
             __cart_acs_rel();
             return -1;
         }
-        __cart_buf_rd(addr, CI_BASE_REG|CI_BUFFER_REG, 512);
-        addr += 512;
-        lba++;
+        __cart_wr(SC_DATA0_REG, SC_BUFFER_REG);
+        __cart_wr(SC_DATA1_REG, n);
+        __cart_wr(SC_COMMAND_REG, SC_SD_READ);
+        if (__sc_sync())
+        {
+            __cart_acs_rel();
+            return -1;
+        }
+        for (i = 0; i < n; i++)
+        {
+            __cart_buf_rd(addr, SC_BUFFER_REG+512*i, 512);
+            addr += 512;
+        }
+        lba += n;
+        count -= n;
     }
     __cart_acs_rel();
     return 0;

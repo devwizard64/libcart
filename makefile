@@ -1,5 +1,5 @@
 #                libcart - Nintendo 64 flash cartridge library
-#                         Copyright (C) 2022 devwizard
+#                     Copyright (C) 2022 - 2023 devwizard
 #      This project is licensed under the terms of the MIT license.  See
 #      LICENSE for more information.
 
@@ -42,7 +42,16 @@ OBJ := \
 	edcardrdcart.o      \
 	edcardwrdram.o      \
 	edcardwrcart.o      \
-	edcardswap.o
+	edcardswap.o        \
+	sc.o                \
+	scinit.o            \
+	scexit.o            \
+	sccardinit.o        \
+	sccardrddram.o      \
+	sccardrdcart.o      \
+	sccardwrdram.o      \
+	sccardwrcart.o      \
+	sccardswap.o
 
 U64_HOST    := mips-linux-gnu
 U64_CC      := $(U64_HOST)-gcc

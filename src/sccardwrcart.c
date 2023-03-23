@@ -7,16 +7,27 @@
 
 #include <cart.h>
 #include "cartint.h"
+#include "sc.h"
 
-int cart_exit(void)
+int sc_card_wr_cart(u32 cart, u32 lba, u32 count)
 {
-    static int (*const exit[CART_MAX])(void) =
+    __cart_acs_get();
+    __sc_sync();
+    __cart_wr(SC_DATA0_REG, lba);
+        __cart_wr(SC_COMMAND_REG, SC_SD_SECTOR_SET);
+    if (__sc_sync())
     {
-        ci_exit,
-        edx_exit,
-        ed_exit,
-        sc_exit,
-    };
-    if (cart_type < 0) return -1;
-    return exit[cart_type]();
+        __cart_acs_rel();
+        return -1;
+    }
+    __cart_wr(SC_DATA0_REG, cart);
+    __cart_wr(SC_DATA1_REG, count);
+        __cart_wr(SC_COMMAND_REG, SC_SD_WRITE);
+    if (__sc_sync())
+    {
+        __cart_acs_rel();
+        return -1;
+    }
+    __cart_acs_rel();
+    return 0;
 }
