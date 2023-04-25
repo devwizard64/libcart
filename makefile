@@ -1,8 +1,3 @@
-#                libcart - Nintendo 64 flash cartridge library
-#                     Copyright (C) 2022 - 2023 devwizard
-#      This project is licensed under the terms of the MIT license.  See
-#      LICENSE for more information.
-
 OBJ := \
 	cart.o              \
 	cartbuf.o           \
@@ -70,10 +65,9 @@ N64_AR      := $(N64_INST)/bin/mips64-elf-ar
 N64_ARCH    := -march=vr4300 -mtune=vr4300
 N64_FLAG    := -I$(N64_INST)/mips64-elf/include -Iinclude -DN64
 N64_OPT     := -O2
-N64_WARN    := -Wall -Wextra -Wno-ignored-qualifiers
+N64_WARN    := -Wall -Wextra -Wpedantic
 N64_CCFLAG  := $(N64_ARCH) -falign-functions=32 -ffunction-sections -fdata-sections
 N64_CCFLAG  += $(N64_FLAG) $(N64_OPT) $(N64_WARN)
-N64_ASFLAG  := $(N64_ARCH)
 
 .PHONY: default
 default: lib/libcart_ultra.a lib/libcart_dragon.a
@@ -97,10 +91,6 @@ build/ultra/%.o: src/%.c
 lib/libcart_dragon.a: $(addprefix build/dragon/,$(OBJ))
 	@mkdir -p $(dir $@)
 	$(N64_AR) rc $@ $^
-
-build/dragon/%.o: src/%.s
-	@mkdir -p $(dir $@)
-	$(N64_CC) $(N64_ASFLAG) -c -o $@ $<
 
 build/dragon/%.o: src/%.c
 	@mkdir -p $(dir $@)

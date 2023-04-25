@@ -1,10 +1,3 @@
-/******************************************************************************/
-/*               libcart - Nintendo 64 flash cartridge library                */
-/*                    Copyright (C) 2022 - 2023 devwizard                     */
-/*     This project is licensed under the terms of the MIT license.  See      */
-/*     LICENSE for more information.                                          */
-/******************************************************************************/
-
 #include <cart.h>
 #include "cartint.h"
 #include "ci.h"
@@ -24,10 +17,17 @@ int ci_card_rd_dram(void *dram, u32 lba, u32 count)
             __ci_sync();
             __cart_wr(CI_COMMAND_REG, CI_SD_RESET);
             __ci_sync();
-            __cart_acs_rel();
-            return -1;
+            CART_ABORT();
         }
-        __cart_buf_rd(addr, CI_BASE_REG|CI_BUFFER_REG, 512);
+        if ((long)addr & 7)
+        {
+            __cart_dma_rd(__cart_buf, CI_BUFFER_REG, 512);
+            __cart_buf_wr(addr);
+        }
+        else
+        {
+            __cart_dma_rd(addr, CI_BUFFER_REG, 512);
+        }
         addr += 512;
         lba++;
     }

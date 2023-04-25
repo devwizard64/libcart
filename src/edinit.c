@@ -1,10 +1,3 @@
-/******************************************************************************/
-/*               libcart - Nintendo 64 flash cartridge library                */
-/*                    Copyright (C) 2022 - 2023 devwizard                     */
-/*     This project is licensed under the terms of the MIT license.  See      */
-/*     LICENSE for more information.                                          */
-/******************************************************************************/
-
 #include <cart.h>
 #include "cartint.h"
 #include "ed.h"
@@ -20,8 +13,7 @@ int ed_init(void)
     if (ver < 0x100 || ver >= 0x400)
     {
         cart_dom2 = dom2;
-        __cart_acs_rel();
-        return -1;
+        CART_ABORT();
     }
     __cart_wr(ED_CFG_REG, ED_CFG_SDRAM_ON);
     __cart_acs_rel();

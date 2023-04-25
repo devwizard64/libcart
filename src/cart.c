@@ -1,10 +1,3 @@
-/******************************************************************************/
-/*               libcart - Nintendo 64 flash cartridge library                */
-/*                    Copyright (C) 2022 - 2023 devwizard                     */
-/*     This project is licensed under the terms of the MIT license.  See      */
-/*     LICENSE for more information.                                          */
-/******************************************************************************/
-
 #include <cart.h>
 #include "cartint.h"
 
@@ -13,6 +6,10 @@ extern void __osPiGetAccess(void);
 extern void __osPiRelAccess(void);
 #endif
 
+/* Temporary buffer aligned for DMA */
+#ifdef __GNUC__
+__attribute__((aligned(16)))
+#endif
 u64 __cart_buf[512/8];
 
 static u32 __cart_dom1_rel;
@@ -25,6 +22,7 @@ void __cart_acs_get(void)
 #ifdef _ULTRA64
     __osPiGetAccess();
 #endif
+    /* Save PI BSD configuration and reconfigure */
     if (cart_dom1)
     {
         __cart_dom1_rel =
@@ -55,6 +53,7 @@ void __cart_acs_get(void)
 
 void __cart_acs_rel(void)
 {
+    /* Restore PI BSD configuration */
     if (__cart_dom1_rel)
     {
         IO_WRITE(PI_BSD_DOM1_LAT_REG, __cart_dom1_rel >>  0);
@@ -133,7 +132,7 @@ void __cart_dma_rd(void *dram, u32 cart, u32 size)
 
 void __cart_dma_wr(const void *dram, u32 cart, u32 size)
 {
-    data_cache_hit_writeback(dram, size);
+    data_cache_hit_writeback((void *)dram, size);
     dma_write_raw_async(dram, cart, size);
     dma_wait();
 }

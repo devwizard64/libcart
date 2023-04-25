@@ -1,10 +1,3 @@
-/******************************************************************************/
-/*               libcart - Nintendo 64 flash cartridge library                */
-/*                    Copyright (C) 2022 - 2023 devwizard                     */
-/*     This project is licensed under the terms of the MIT license.  See      */
-/*     LICENSE for more information.                                          */
-/******************************************************************************/
-
 #include <cart.h>
 #include "cartint.h"
 #include "ci.h"
@@ -12,10 +5,20 @@
 int ci_init(void)
 {
     __cart_acs_get();
+    /* Check if using extended addressing */
+    __ci_base_reg = CI_EXT_BASE_REG;
     if (__cart_rd(CI_MAGIC_REG) != CI_MAGIC)
     {
-        __cart_acs_rel();
-        return -1;
+        /* Check if using regular addressing */
+        __ci_base_reg = CI_BASE_REG;
+        if (__cart_rd(CI_MAGIC_REG) != CI_MAGIC) CART_ABORT();
+        /* If HW2, switch to extended addressing */
+        if ((__cart_rd(CI_VARIANT_REG) & 0xFFFF) >= CI_VARIANT_HW2)
+        {
+            __ci_sync();
+            __cart_wr(CI_COMMAND_REG, CI_EXT_ADDR_ON);
+            __ci_base_reg = CI_EXT_BASE_REG;
+        }
     }
     __ci_sync();
     __cart_wr(CI_COMMAND_REG, CI_CARTROM_WR_ON);

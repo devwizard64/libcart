@@ -1,10 +1,3 @@
-/******************************************************************************/
-/*               libcart - Nintendo 64 flash cartridge library                */
-/*                    Copyright (C) 2022 - 2023 devwizard                     */
-/*     This project is licensed under the terms of the MIT license.  See      */
-/*     LICENSE for more information.                                          */
-/******************************************************************************/
-
 #ifndef sgi
 .set gp=64
 #endif
@@ -37,8 +30,7 @@ __sd_crc16:
     sd      $0, ($29)
     addu    $6, $5, 512-8
 1:
-    ldl     $2, 0($5)
-    ldr     $2, 7($5)
+    ld      $2, ($5)
     dsrl    $3, $2, 7
     xor     $3, $2
     and     $3, $8
@@ -63,9 +55,9 @@ __sd_crc16:
     dsrl    $2, 4
     bal     3f
     or      $2, $7
-    add     $7, $29, 8-2
+    addu    $7, $29, 8-2
 2:
-    lhu     $3, ($29)
+    lhu     $3, ($7)
     xor     $24, $2, $3
     srl     $24, 8
     and     $24, 0xFF
@@ -88,22 +80,15 @@ __sd_crc16:
     xor     $3, $24
     sll     $24, 7
     xor     $3, $24
-    sh      $3, ($29)
+    sh      $3, ($7)
     dsrl    $2, 16
-    bne     $29, $7, 2b
-    addu    $29, 2
-    subu    $29, 8
+    bne     $7, $29, 2b
+    subu    $7, 2
     bne     $5, $6, 1b
     addu    $5, 8
-    lhu     $2, 6($29)
-    dsll    $2, 32
-    lhu     $24, 4($29)
-    or      $2, $24
-    lhu     $3, 2($29)
-    dsll    $3, 32
-    lhu     $24, 0($29)
+    lwu     $2, 0($29)
     bal     3f
-    or      $3, $24
+    lwu     $3, 4($29)
     dsll    $3, $2, 32
     dsrl    $3, 32
     bal     3f

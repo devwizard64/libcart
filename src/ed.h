@@ -1,10 +1,3 @@
-/******************************************************************************/
-/*               libcart - Nintendo 64 flash cartridge library                */
-/*                    Copyright (C) 2022 - 2023 devwizard                     */
-/*     This project is licensed under the terms of the MIT license.  See      */
-/*     LICENSE for more information.                                          */
-/******************************************************************************/
-
 #ifndef __ED_H__
 #define __ED_H__
 
@@ -55,5 +48,25 @@
 #define ED_SPI_1BIT             (1 << 5)
 
 #define ED_KEY                  0x1234
+
+#define ED_SD_CMD_RD            (ED_SPI_CMD|ED_SPI_RD)
+#define ED_SD_CMD_WR            (ED_SPI_CMD|ED_SPI_WR)
+#define ED_SD_DAT_RD            (ED_SPI_DAT|ED_SPI_RD)
+#define ED_SD_DAT_WR            (ED_SPI_DAT|ED_SPI_WR)
+
+#define ED_SD_CMD_8b            ED_SPI_8BIT
+#define ED_SD_CMD_1b            ED_SPI_1BIT
+#define ED_SD_DAT_8b            ED_SPI_8BIT
+#define ED_SD_DAT_1b            ED_SPI_1BIT
+
+#define __ed_sd_mode(reg, val)  __cart_wr(ED_SPI_CFG_REG, __sd_cfg|(reg)|(val))
+#define __ed_sd_cmd_rd(val)     __ed_spi((val) & 0xFF)
+#define __ed_sd_cmd_wr(val)     __ed_spi((val) & 0xFF)
+#define __ed_sd_dat_rd()        __ed_spi(0xFF)
+#define __ed_sd_dat_wr(val)     __ed_spi((val) & 0xFF)
+
+extern int __ed_spi(int val);
+extern int __ed_sd_cmd(int cmd, u32 arg);
+extern int __ed_sd_close(int flag);
 
 #endif /* __ED_H__ */

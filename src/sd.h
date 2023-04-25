@@ -1,10 +1,3 @@
-/******************************************************************************/
-/*               libcart - Nintendo 64 flash cartridge library                */
-/*                    Copyright (C) 2022 - 2023 devwizard                     */
-/*     This project is licensed under the terms of the MIT license.  See      */
-/*     LICENSE for more information.                                          */
-/******************************************************************************/
-
 #ifndef __SD_H__
 #define __SD_H__
 
@@ -29,6 +22,6 @@ extern unsigned char __sd_type;
 extern unsigned char __sd_flag;
 
 extern int __sd_crc7(const char *src);
-extern void __sd_crc16(unsigned short *dst, const unsigned char *src);
+extern void __sd_crc16(u64 *dst, const u64 *src);
 
 #endif /* __SD_H__ */

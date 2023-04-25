@@ -1,9 +1,6 @@
 # libcart - Nintendo 64 flash cartridge library
 Copyright (C) 2022 - 2023 devwizard
 
-This project is licensed under the terms of the MIT license.  See `LICENSE` for
-more information.
-
 ## About
 This library provides an interface to several Nintendo 64 flash cartridges.  It
 automatically detects the hardware in use, and uses the appropriate protocol for
@@ -22,10 +19,6 @@ the hardware.
 * Uses optimised bus timing for faster DMA (EverDrive-64).
 * Memory card access, with I/O between RDRAM and cartridge ROM.
 
-## Limitations
-* If using 64Drive HW2, ROM size is limited to 64 MB.
-
 ## Credits
-
 Special thanks to Reonu and Meeq for their extensive testing on ED64Plus and
 EverDrive-64 V2.  Without them, this project would not be possible.
