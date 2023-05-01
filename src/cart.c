@@ -17,6 +17,8 @@ static u32 __cart_dom2_rel;
 u32 cart_dom1;
 u32 cart_dom2;
 
+u32 cart_size = 0x4000000; /* 64 MiB */
+
 void __cart_acs_get(void)
 {
 #ifdef _ULTRA64

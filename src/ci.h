@@ -40,7 +40,6 @@
 #define CI_VARIANT_HW2          0x4200  /* B */
 
 extern u32 __ci_base_reg;
-
 extern int __ci_sync(void);
 
 #endif /* __CI_H__ */

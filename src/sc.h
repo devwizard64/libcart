@@ -15,6 +15,7 @@
 #define SC_CMD_ERROR            0x40000000
 #define SC_IRQ_PENDING          0x20000000
 
+#define SC_CONFIG_GET           'c'
 #define SC_CONFIG_SET           'C'
 #define SC_SD_OP                'i'
 #define SC_SD_SECTOR_SET        'I'
@@ -22,11 +23,16 @@
 #define SC_SD_WRITE             'S'
 
 #define SC_CFG_ROM_WRITE        1
+#define SC_CFG_DD_MODE          3
+#define SC_CFG_SAVE_TYPE        6
 
 #define SC_SD_DEINIT            0
 #define SC_SD_INIT              1
 #define SC_SD_GET_STATUS        2
 #define SC_SD_GET_INFO          3
+
+#define SC_DD_MODE_REGS         1
+#define SC_DD_MODE_IPL          2
 
 #define SC_VERSION              0x53437632  /* SCv2 */
 

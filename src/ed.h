@@ -47,6 +47,11 @@
 #define ED_SPI_8BIT             (0 << 5)
 #define ED_SPI_1BIT             (1 << 5)
 
+#define ED_SAV_EEP_ON           (1 << 0)
+#define ED_SAV_SRM_ON           (1 << 1)
+#define ED_SAV_EEP_SIZE         (1 << 2)
+#define ED_SAV_SRM_SIZE         (1 << 3)
+
 #define ED_KEY                  0x1234
 
 #define ED_SD_CMD_RD            (ED_SPI_CMD|ED_SPI_RD)

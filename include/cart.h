@@ -27,10 +27,14 @@ extern u32 cart_dom2;
 /* Cartridge type */
 extern int cart_type;
 
+/* Size of cartridge SDRAM */
+extern u32 cart_size;
+
 /* Detect cartridge and initialize it */
 extern int cart_init(void);
 /* Close the cartridge interface */
 extern int cart_exit(void);
+
 /* Initialize card */
 extern int cart_card_init(void);
 /* Swap high and low bytes per 16-bit word when reading into SDRAM */
