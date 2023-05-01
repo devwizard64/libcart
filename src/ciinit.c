@@ -20,6 +20,10 @@ int ci_init(void)
             __ci_base_reg = CI_EXT_BASE_REG;
             cart_size = 0xF000000; /* 240 MiB */
         }
+        else
+        {
+            cart_size = 0x4000000; /* 64 MiB */
+        }
     }
     __ci_sync();
     __cart_wr(CI_COMMAND_REG, CI_CARTROM_WR_ON);

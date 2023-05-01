@@ -30,6 +30,10 @@ int ed_init(void)
         {
             cart_size = 0x3FF8000; /* 64 MiB - 32KiB */
         }
+        else
+        {
+            cart_size = 0x4000000; /* 64 MiB */
+        }
     }
     __cart_wr(ED_CFG_REG, ED_CFG_SDRAM_ON);
     __cart_acs_rel();

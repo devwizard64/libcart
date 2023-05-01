@@ -13,6 +13,7 @@ int edx_init(void)
         cart_dom1 = dom1;
         CART_ABORT();
     }
+    cart_size = 0x4000000; /* 64 MiB */
     __cart_wr(EDX_SYS_CFG_REG, EDX_CFG_SDRAM_ON);
     __cart_acs_rel();
     return 0;
