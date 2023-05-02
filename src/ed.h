@@ -28,7 +28,7 @@
 
 #define ED_CFG_SDRAM_OFF        (0 << 0)
 #define ED_CFG_SDRAM_ON         (1 << 0)
-#define ED_CFG_SWAP             (1 << 1)
+#define ED_CFG_BYTESWAP         (1 << 1)
 
 #define ED_STATE_DMA_BUSY       (1 << 0)
 #define ED_STATE_DMA_TOUT       (1 << 1)

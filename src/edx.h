@@ -36,7 +36,7 @@
 #define EDX_CFG_SDRAM_ON        0x0000
 #define EDX_CFG_SDRAM_OFF       0x0001
 #define EDX_CFG_REGS_OFF        0x0002
-#define EDX_CFG_SWAP            0x0004
+#define EDX_CFG_BYTESWAP        0x0004
 
 #define EDX_KEY                 0xAA55
 

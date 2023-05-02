@@ -2,7 +2,7 @@
 #include "cartint.h"
 #include "ci.h"
 
-int ci_card_swap(int flag)
+int ci_card_byteswap(int flag)
 {
     __cart_acs_get();
     __ci_sync();

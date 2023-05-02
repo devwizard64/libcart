@@ -10,7 +10,7 @@ OBJ := \
 	cartcardrdcart.o    \
 	cartcardwrdram.o    \
 	cartcardwrcart.o    \
-	cartcardswap.o      \
+	cartcardbyteswap.o  \
 	ci.o                \
 	ciinit.o            \
 	ciexit.o            \
@@ -19,7 +19,7 @@ OBJ := \
 	cicardrdcart.o      \
 	cicardwrdram.o      \
 	cicardwrcart.o      \
-	cicardswap.o        \
+	cicardbyteswap.o    \
 	edxinit.o           \
 	edxexit.o           \
 	edxcard.o           \
@@ -28,7 +28,7 @@ OBJ := \
 	edxcardrdcart.o     \
 	edxcardwrdram.o     \
 	edxcardwrcart.o     \
-	edxcardswap.o       \
+	edxcardbyteswap.o   \
 	edinit.o            \
 	edexit.o            \
 	edcard.o            \
@@ -37,7 +37,7 @@ OBJ := \
 	edcardrdcart.o      \
 	edcardwrdram.o      \
 	edcardwrcart.o      \
-	edcardswap.o        \
+	edcardbyteswap.o    \
 	sc.o                \
 	scinit.o            \
 	scexit.o            \
@@ -46,11 +46,11 @@ OBJ := \
 	sccardrdcart.o      \
 	sccardwrdram.o      \
 	sccardwrcart.o      \
-	sccardswap.o
+	sccardbyteswap.o
 
-U64_HOST    := mips-linux-gnu
-U64_CC      := $(U64_HOST)-gcc
-U64_AR      := $(U64_HOST)-ar
+U64_PREFIX  := mips-linux-gnu-
+U64_CC      := $(U64_PREFIX)gcc
+U64_AR      := $(U64_PREFIX)ar
 U64_ARCH    := -mabi=32 -march=vr4300 -mfix4300 -mno-abicalls -fno-PIC -G 0
 U64_FLAG    := -Iultra/include -Iinclude -D_ULTRA64
 U64_OPT     := -Os

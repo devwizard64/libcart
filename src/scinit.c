@@ -4,18 +4,25 @@
 
 int sc_init(void)
 {
+    u32 cfg;
     __cart_acs_get();
     __cart_wr(SC_KEY_REG, SC_KEY_RESET);
     __cart_wr(SC_KEY_REG, SC_KEY_UNL);
     __cart_wr(SC_KEY_REG, SC_KEY_OCK);
-    if (__cart_rd(SC_VERSION_REG) != SC_VERSION) CART_ABORT();
+    if (__cart_rd(SC_IDENTIFIER_REG) != SC_IDENTIFIER) CART_ABORT();
     __sc_sync();
-    /* SC64 maps 64DD IPL to SDRAM */
+    /* SC64 uses SDRAM for 64DD */
     __cart_wr(SC_DATA0_REG, SC_CFG_DD_MODE);
     __cart_wr(SC_COMMAND_REG, SC_CONFIG_GET);
     __sc_sync();
+    cfg = __cart_rd(SC_DATA1_REG);
+    /* Have registers */
+    if (cfg & SC_DD_MODE_REGS)
+    {
+        cart_size = 0x2000000; /* 32 MiB */
+    }
     /* Have IPL */
-    if (__cart_rd(SC_DATA1_REG) & SC_DD_MODE_IPL)
+    else if (cfg & SC_DD_MODE_IPL)
     {
         cart_size = 0x3BC0000; /* 59.75 MiB */
     }

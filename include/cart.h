@@ -38,7 +38,7 @@ extern int cart_exit(void);
 /* Initialize card */
 extern int cart_card_init(void);
 /* Swap high and low bytes per 16-bit word when reading into SDRAM */
-extern int cart_card_swap(int flag);
+extern int cart_card_byteswap(int flag);
 /* Read sectors from card to system RDRAM */
 extern int cart_card_rd_dram(void *dram, u32 lba, u32 count);
 /* Read sectors from card to cartridge SDRAM */
@@ -52,7 +52,7 @@ extern int cart_card_wr_cart(u32 cart, u32 lba, u32 count);
 extern int ci_init(void);
 extern int ci_exit(void);
 extern int ci_card_init(void);
-extern int ci_card_swap(int flag);
+extern int ci_card_byteswap(int flag);
 extern int ci_card_rd_dram(void *dram, u32 lba, u32 count);
 extern int ci_card_rd_cart(u32 cart, u32 lba, u32 count);
 extern int ci_card_wr_dram(const void *dram, u32 lba, u32 count);
@@ -62,7 +62,7 @@ extern int ci_card_wr_cart(u32 cart, u32 lba, u32 count);
 extern int edx_init(void);
 extern int edx_exit(void);
 extern int edx_card_init(void);
-extern int edx_card_swap(int flag);
+extern int edx_card_byteswap(int flag);
 extern int edx_card_rd_dram(void *dram, u32 lba, u32 count);
 extern int edx_card_rd_cart(u32 cart, u32 lba, u32 count);
 extern int edx_card_wr_dram(const void *dram, u32 lba, u32 count);
@@ -72,7 +72,7 @@ extern int edx_card_wr_cart(u32 cart, u32 lba, u32 count);
 extern int ed_init(void);
 extern int ed_exit(void);
 extern int ed_card_init(void);
-extern int ed_card_swap(int flag);
+extern int ed_card_byteswap(int flag);
 extern int ed_card_rd_dram(void *dram, u32 lba, u32 count);
 extern int ed_card_rd_cart(u32 cart, u32 lba, u32 count);
 extern int ed_card_wr_dram(const void *dram, u32 lba, u32 count);
@@ -82,7 +82,7 @@ extern int ed_card_wr_cart(u32 cart, u32 lba, u32 count);
 extern int sc_init(void);
 extern int sc_exit(void);
 extern int sc_card_init(void);
-extern int sc_card_swap(int flag);
+extern int sc_card_byteswap(int flag);
 extern int sc_card_rd_dram(void *dram, u32 lba, u32 count);
 extern int sc_card_rd_cart(u32 cart, u32 lba, u32 count);
 extern int sc_card_wr_dram(const void *dram, u32 lba, u32 count);
