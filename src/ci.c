@@ -2,8 +2,6 @@
 #include "cartint.h"
 #include "ci.h"
 
-u32 __ci_base_reg;
-
 int __ci_sync(void)
 {
     int n = 65536;
