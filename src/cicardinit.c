@@ -4,5 +4,5 @@
 
 int ci_card_init(void)
 {
-    return 0;
+	return 0;
 }
