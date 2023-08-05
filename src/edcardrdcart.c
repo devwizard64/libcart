@@ -43,13 +43,25 @@ int ed_card_rd_cart(u32 cart, u32 lba, u32 count)
 	}
 	else
 	{
+		if (cart_card_byteswap)
+		{
+			__cart_wr(ED_CFG_REG, ED_CFG_SDRAM_ON|ED_CFG_BYTESWAP);
+		}
 		__ed_sd_mode(ED_SD_DAT_RD, ED_SD_DAT_8b);
 		__cart_wr(ED_DMA_LEN_REG, count-1);
 		__cart_wr(ED_DMA_ADDR_REG, (cart & 0x3FFFFFF) >> 11);
 		__cart_wr(ED_DMA_CFG_REG, ED_DMA_SD_TO_RAM);
 		while ((resp = __cart_rd(ED_STATUS_REG)) & ED_STATE_DMA_BUSY)
 		{
-			if (resp & ED_STATE_DMA_TOUT) CART_ABORT();
+			if (resp & ED_STATE_DMA_TOUT)
+			{
+				__cart_wr(ED_CFG_REG, ED_CFG_SDRAM_ON);
+				CART_ABORT();
+			}
+		}
+		if (cart_card_byteswap)
+		{
+			__cart_wr(ED_CFG_REG, ED_CFG_SDRAM_ON);
 		}
 	}
 	if (__ed_sd_close(1)) CART_ABORT();

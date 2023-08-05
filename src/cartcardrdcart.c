@@ -1,6 +1,8 @@
 #include <cart.h>
 #include "cartint.h"
 
+char cart_card_byteswap;
+
 int cart_card_rd_cart(u32 cart, u32 lba, u32 count)
 {
 	static int (*const card_rd_cart[CART_MAX])(

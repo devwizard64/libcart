@@ -35,6 +35,8 @@ typedef uint64_t u64;
 
 #define CART_ABORT()            {__cart_acs_rel(); return -1;}
 
+extern u32 __cart_dom1;
+extern u32 __cart_dom2;
 extern void __cart_acs_get(void);
 extern void __cart_acs_rel(void);
 extern void __cart_dma_rd(void *dram, u32 cart, u32 size);
