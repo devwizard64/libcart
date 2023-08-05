@@ -14,13 +14,14 @@ int cart_init(void)
     };
     int i;
     int result;
-    if (!cart_dom1)
+    if (!__cart_dom1)
     {
-        cart_dom1 = 0x8030FFFF;
+        __cart_dom1 = 0x8030FFFF;
         __cart_acs_get();
-        cart_dom1 = __cart_rd(0x10000000);
+        __cart_dom1 = __cart_rd(0x10000000);
         __cart_acs_rel();
     }
+    if (!__cart_dom2) __cart_dom2 = __cart_dom1;
     if (cart_type < 0)
     {
         for (i = 0; i < CART_MAX; i++)

@@ -14,8 +14,8 @@ u64 __cart_buf[512/8];
 
 static u32 __cart_dom1_rel;
 static u32 __cart_dom2_rel;
-u32 cart_dom1;
-u32 cart_dom2;
+u32 __cart_dom1;
+u32 __cart_dom2;
 
 u32 cart_size;
 
@@ -25,7 +25,7 @@ void __cart_acs_get(void)
     __osPiGetAccess();
 #endif
     /* Save PI BSD configuration and reconfigure */
-    if (cart_dom1)
+    if (__cart_dom1)
     {
         __cart_dom1_rel =
             IO_READ(PI_BSD_DOM1_LAT_REG) <<  0 |
@@ -33,12 +33,12 @@ void __cart_acs_get(void)
             IO_READ(PI_BSD_DOM1_PGS_REG) << 16 |
             IO_READ(PI_BSD_DOM1_RLS_REG) << 20 |
             1 << 31;
-        IO_WRITE(PI_BSD_DOM1_LAT_REG, cart_dom1 >>  0);
-        IO_WRITE(PI_BSD_DOM1_PWD_REG, cart_dom1 >>  8);
-        IO_WRITE(PI_BSD_DOM1_PGS_REG, cart_dom1 >> 16);
-        IO_WRITE(PI_BSD_DOM1_RLS_REG, cart_dom1 >> 20);
+        IO_WRITE(PI_BSD_DOM1_LAT_REG, __cart_dom1 >>  0);
+        IO_WRITE(PI_BSD_DOM1_PWD_REG, __cart_dom1 >>  8);
+        IO_WRITE(PI_BSD_DOM1_PGS_REG, __cart_dom1 >> 16);
+        IO_WRITE(PI_BSD_DOM1_RLS_REG, __cart_dom1 >> 20);
     }
-    if (cart_dom2)
+    if (__cart_dom2)
     {
         __cart_dom2_rel =
             IO_READ(PI_BSD_DOM2_LAT_REG) <<  0 |
@@ -46,10 +46,10 @@ void __cart_acs_get(void)
             IO_READ(PI_BSD_DOM2_PGS_REG) << 16 |
             IO_READ(PI_BSD_DOM2_RLS_REG) << 20 |
             1 << 31;
-        IO_WRITE(PI_BSD_DOM2_LAT_REG, cart_dom2 >>  0);
-        IO_WRITE(PI_BSD_DOM2_PWD_REG, cart_dom2 >>  8);
-        IO_WRITE(PI_BSD_DOM2_PGS_REG, cart_dom2 >> 16);
-        IO_WRITE(PI_BSD_DOM2_RLS_REG, cart_dom2 >> 20);
+        IO_WRITE(PI_BSD_DOM2_LAT_REG, __cart_dom2 >>  0);
+        IO_WRITE(PI_BSD_DOM2_PWD_REG, __cart_dom2 >>  8);
+        IO_WRITE(PI_BSD_DOM2_PGS_REG, __cart_dom2 >> 16);
+        IO_WRITE(PI_BSD_DOM2_RLS_REG, __cart_dom2 >> 20);
     }
 }
 
