@@ -8,8 +8,7 @@ int memcmp(const void *s1, const void *s2, size_t n)
 	{
 		unsigned char a = *c1++;
 		unsigned char b = *c2++;
-		if (a < b) return -1;
-		if (a > b) return +1;
+		if (a != b) return (a-b) >> 31 << 1 | 1;
 	}
 	return 0;
 }

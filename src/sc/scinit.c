@@ -47,6 +47,7 @@ int sc_init(void)
 			cart_size = 0x4000000; /* 64 MiB */
 		}
 	}
+	__cart_dom1 = 0x802F0C05;
 	__cart_acs_rel();
 	return 0;
 }

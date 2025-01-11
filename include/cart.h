@@ -8,7 +8,7 @@
 typedef uint32_t u32;
 #endif
 
-/* Cartrige types */
+/* Cartridge types */
 #define CART_NULL       -1
 #define CART_CI         0       /* 64Drive */
 #define CART_EDX        1       /* EverDrive-64 X-series */
