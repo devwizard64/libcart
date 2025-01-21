@@ -1,6 +1,18 @@
 #include <cart.h>
 #include "cartint.h"
 
+#define MI_VERSION ((volatile uint32_t*)0xA4300004)
+
+static int cart_bbplayer(void)
+{
+	static int bbplayer = -1;
+	if (bbplayer == -1)
+	{
+		bbplayer = (*MI_VERSION & 0xF0) == 0xB0;
+	}
+	return bbplayer;
+}
+
 int cart_type = CART_NULL;
 
 int cart_init(void)
@@ -14,6 +26,11 @@ int cart_init(void)
 	};
 	int i;
 	int result;
+	// On iQue, touching PI addresses outside mapped ROM triggers a bus error
+	if (cart_bbplayer())
+	{
+		return -1;
+	}
 	if (!__cart_dom1)
 	{
 		__cart_dom1 = 0x8030FFFF;
