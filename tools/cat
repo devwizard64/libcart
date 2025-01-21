@@ -1,0 +1,112 @@
+#!/usr/bin/env python3
+
+import sys
+
+arg = []
+flag = []
+src = None
+i = 1
+while i < len(sys.argv):
+	x = sys.argv[i]
+	i += 1
+	if x.startswith("-"):
+		if x.startswith("-I") or x.startswith("-D"):
+			if len(x) == 2:
+				x += sys.argv[i]
+				i += 1
+			flag.append(x)
+		elif x == "-c":
+			src = True
+		elif x == "-h":
+			src = False
+		else:
+			sys.stderr.write("error: bad opt '%s'\n" % x)
+			sys.exit(1)
+	else:
+		arg.append(x)
+if src is None:
+	sys.stderr.write("error: type not specified\n")
+	sys.exit(1)
+ultra = "-D_ULTRA64" in flag
+if src:
+	lib = "libultra" if ultra else "libdragon"
+	url = "https://github.com/devwizard64/libcart"
+	banner = "Adapted for use with " + lib + " - " + url
+	sys.stdout.write("/*"+"*"*76+"*/\n")
+	sys.stdout.write("/*"+banner.center(76)+"*/\n")
+	sys.stdout.write("/*"+"*"*76+"*/\n")
+	sys.stdout.write("\n")
+	if ultra:
+		sys.stdout.write("#include <ultra64.h>\n")
+		sys.stdout.write("#include <cart.h>\n")
+	else:
+		sys.stdout.write("#include \"n64types.h\"\n")
+		sys.stdout.write("#include \"n64sys.h\"\n")
+		sys.stdout.write("#include \"dma.h\"\n")
+		sys.stdout.write("#include \"libcart/cart.h\"\n")
+	sys.stdout.write("\n")
+flag = True
+for path in arg:
+	code = 0
+	for line in open(path, "r"):
+		if src:
+			if line.startswith("extern"):
+				if "__os" not in line: continue
+			if (
+				line.startswith("void __") or
+				line.startswith("int __") or
+				line.startswith("unsigned char __") or
+				line.startswith("u32 __") or
+				line.startswith("u64 __")
+			): line = "static "+line
+		if line == "#ifdef __GNUC__\n":
+			if not ultra:
+				code = 2
+				continue
+		if line == "#ifdef _ULTRA64\n":
+			code = 2 if ultra else 3
+			continue
+		if line == "#ifndef _ULTRA64\n":
+			code = 3 if ultra else 2
+			continue
+		if line.startswith("#else"):
+			if code & 2:
+				code ^= 1
+				continue
+		if line.startswith("#endif"):
+			if code & 2:
+				code = 0
+				continue
+		if code & 1: continue
+		if ultra:
+			line = line.replace("u_uint64_t", "u64")
+			line = line.replace("uint16_t", "u16")
+			line = line.replace("uint32_t", "u32")
+			line = line.replace("uint64_t", "u64")
+		else:
+			if line.startswith("typedef"): continue
+			if line.startswith("#define __cart_"): continue
+			line = line.replace("u16", "uint16_t")
+			line = line.replace("u32", "uint32_t")
+			line = line.replace("u64", "uint64_t")
+			line = line.replace("__cart_rd", "io_read")
+			line = line.replace("__cart_wr", "io_write")
+			if line.startswith("#define IO_WRITE"):
+				line = line[:28] + "\\\n\t\t" + line[28:]
+			if line == "__attribute__((aligned(16)))\n":
+				line = line[:-1] + " "
+			line = line.replace("\t", "    ")
+		if src:
+			if line.startswith("#include "): continue
+			if line.endswith("_H__\n"):
+				if line.startswith("#ifndef __"): continue
+				if line.startswith("#define __"): continue
+			if line.endswith("_H__ */\n"):
+				if line.startswith("#endif /* __"): continue
+		if line == "\n":
+			if not flag:
+				flag = True
+				sys.stdout.write(line)
+		else:
+			flag = False
+			sys.stdout.write(line)

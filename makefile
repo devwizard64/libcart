@@ -58,6 +58,60 @@ OBJ := \
 	$(ED_OBJ) \
 	$(SC_OBJ)
 
+INCLUDE := \
+	include/cart.h
+
+SRC := \
+	src/cartint.h \
+	src/cart.c \
+	src/cartbuf.c \
+	src/sd.h \
+	src/sd.c \
+	src/sdcrc16.c \
+	src/cart/cartinit.c \
+	src/cart/cartexit.c \
+	src/cart/cartcardinit.c \
+	src/cart/cartcardrddram.c \
+	src/cart/cartcardrdcart.c \
+	src/cart/cartcardwrdram.c \
+	src/cart/cartcardwrcart.c \
+	src/ci/ci.h \
+	src/ci/ci.c \
+	src/ci/ciinit.c \
+	src/ci/ciexit.c \
+	src/ci/cicardinit.c \
+	src/ci/cicardrddram.c \
+	src/ci/cicardrdcart.c \
+	src/ci/cicardwrdram.c \
+	src/ci/cicardwrcart.c \
+	src/edx/edx.h \
+	src/edx/edxinit.c \
+	src/edx/edxexit.c \
+	src/edx/edxcard.c \
+	src/edx/edxcardinit.c \
+	src/edx/edxcardrddram.c \
+	src/edx/edxcardrdcart.c \
+	src/edx/edxcardwrdram.c \
+	src/edx/edxcardwrcart.c \
+	src/ed/ed.h \
+	src/ed/edinit.c \
+	src/ed/edexit.c \
+	src/ed/edcard.c \
+	src/ed/edcardinit.c \
+	src/ed/edcardrddram.c \
+	src/ed/edcardrdcart.c \
+	src/ed/edcardwrdram.c \
+	src/ed/edcardwrcart.c \
+	src/sc/sc.h \
+	src/sc/sc.c \
+	src/sc/scinit.c \
+	src/sc/scexit.c \
+	src/sc/sccardinit.c \
+	src/sc/sccardrddram.c \
+	src/sc/sccardrdcart.c \
+	src/sc/sccardwrdram.c \
+	src/sc/sccardwrcart.c
+
 U64_PREFIX  := mips-linux-gnu-
 U64_CC      := $(U64_PREFIX)gcc
 U64_AR      := $(U64_PREFIX)ar
@@ -69,7 +123,7 @@ U64_CFLAGS = $(U64_ARCH) -mno-abicalls -fno-PIC -mno-check-zero-division -fno-bu
 U64_ASFLAGS = $(U64_ARCH) -mno-abicalls -fno-PIC -G 0 $(U64_FLAG) $(U64_OPT)
 
 .PHONY: default
-default: lib/libcart.a
+default: lib/libcart.a lib/ultra/cart.h lib/ultra/libcart.c lib/dragon/cart.h lib/dragon/libcart.c
 
 .PHONY: clean
 clean:
@@ -86,3 +140,19 @@ build/%.o: src/%.s
 build/%.o: src/%.c
 	@mkdir -p $(dir $@)
 	$(U64_CC) $(U64_CPPFLAGS) $(U64_CFLAGS) -c -o $@ $<
+
+lib/ultra/cart.h: $(INCLUDE)
+	@mkdir -p $(dir $@)
+	tools/cat -D_ULTRA64 -h $(INCLUDE) > $@
+
+lib/ultra/libcart.c: $(SRC)
+	@mkdir -p $(dir $@)
+	tools/cat -D_ULTRA64 -c $(SRC) > $@
+
+lib/dragon/cart.h: $(INCLUDE)
+	@mkdir -p $(dir $@)
+	tools/cat -h $(INCLUDE) > $@
+
+lib/dragon/libcart.c: $(SRC)
+	@mkdir -p $(dir $@)
+	tools/cat -c $(SRC) > $@
