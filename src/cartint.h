@@ -13,6 +13,8 @@ extern void __cart_wr(u32 addr, u32 data);
 #include <dma.h>
 typedef uint64_t u64;
 
+#define MI_BASE_REG             0x04300000
+#define MI_VERSION_REG          (MI_BASE_REG+0x04)
 #define PI_BASE_REG             0x04600000
 #define PI_BSD_DOM1_LAT_REG     (PI_BASE_REG+0x14)
 #define PI_BSD_DOM1_PWD_REG     (PI_BASE_REG+0x18)
