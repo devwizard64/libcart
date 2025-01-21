@@ -12,6 +12,8 @@
 /* rcp.h */
 #define K0BASE                  0x80000000
 #define K1BASE                  0xA0000000
+#define MI_BASE_REG             0x04300000
+#define MI_VERSION_REG          (MI_BASE_REG+0x04)
 #define PI_BASE_REG             0x04600000
 #define PI_DRAM_ADDR_REG        (PI_BASE_REG+0x00)
 #define PI_CART_ADDR_REG        (PI_BASE_REG+0x04)

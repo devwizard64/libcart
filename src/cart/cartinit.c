@@ -12,8 +12,9 @@ int cart_init(void)
 		ed_init,
 		sc_init,
 	};
-	int i;
-	int result;
+	int i, result;
+	/* bbplayer */
+	if ((IO_READ(MI_VERSION_REG) & 0xF0) == 0xB0) return -1;
 	if (!__cart_dom1)
 	{
 		__cart_dom1 = 0x8030FFFF;
