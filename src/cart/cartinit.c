@@ -2,16 +2,7 @@
 #include "cartint.h"
 
 #define MI_VERSION ((volatile uint32_t*)0xA4300004)
-
-static int cart_bbplayer(void)
-{
-	static int bbplayer = -1;
-	if (bbplayer == -1)
-	{
-		bbplayer = (*MI_VERSION & 0xF0) == 0xB0;
-	}
-	return bbplayer;
-}
+#define cart_bbplayer() ((*MI_VERSION & 0xF0) == 0xB0)
 
 int cart_type = CART_NULL;
 
