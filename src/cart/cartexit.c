@@ -10,6 +10,11 @@ int cart_exit(void)
 		ed_exit,
 		sc_exit,
 	};
-	if (cart_type < 0) return -1;
-	return exit[cart_type]();
+	int result = -1;
+	if (cart_type >= 0)
+	{
+		result = exit[cart_type]();
+	}
+	cart_type = CART_UNDEFINED;
+	return result;
 }
