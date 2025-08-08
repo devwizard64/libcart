@@ -1,7 +1,7 @@
 #include <cart.h>
 #include "cartint.h"
 
-int cart_type = CART_NULL;
+int cart_type = CART_UNDEFINED;
 
 int cart_init(void)
 {
@@ -13,8 +13,17 @@ int cart_init(void)
 		sc_init,
 	};
 	int i, result;
+	/* bail if already initialized */
+	if (cart_type != CART_UNDEFINED)
+	{
+		return -1;
+	}
 	/* bbplayer */
-	if ((IO_READ(MI_VERSION_REG) & 0xF0) == 0xB0) return -1;
+	if ((IO_READ(MI_VERSION_REG) & 0xF0) == 0xB0)
+	{
+		cart_type = CART_NULL;
+		return -1;
+	}
 	if (!__cart_dom1)
 	{
 		__cart_dom1 = 0x8030FFFF;
@@ -23,17 +32,15 @@ int cart_init(void)
 		__cart_acs_rel();
 	}
 	if (!__cart_dom2) __cart_dom2 = __cart_dom1;
-	if (cart_type < 0)
+	/* detect */
+	for (i = 0; i < CART_MAX; i++)
 	{
-		for (i = 0; i < CART_MAX; i++)
+		if ((result = init[i]()) >= 0)
 		{
-			if ((result = init[i]()) >= 0)
-			{
-				cart_type = i;
-				return result;
-			}
+			cart_type = i;
+			return result;
 		}
-		return -1;
 	}
-	return init[cart_type]();
+	cart_type = CART_NULL;
+	return -1;
 }
